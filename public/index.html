@@ -7,6 +7,9 @@
   <body>
     <h1>Welcome to Firebase</h1>
     <h3>Have fun with firebase</h3>
+    <ul>
+
+    </ul>
   </body>
 
   <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
@@ -24,17 +27,41 @@
 
     // reference database
     var db = firebase.database();
-    var playersRef = db.ref('players');
+    // var playersRef = db.ref('players');
+    var playersRef = db.ref('topscorers');
 
     // show data
-    playersRef.on('value', showData, showError);
+    // playersRef.on('value', showData, showError);
 
     // Notification
-    playersRef.on('child_added', userAdded);
-    playersRef.on('child_changed', userChanged);
+    // playersRef.on('child_added', userAdded);
+    // playersRef.on('child_changed', userChanged);
+
+    //filter and sort
+    //orderByKey orderByChild orderByValue
+    // playersRef.orderByChild('no').on('value', showData, showError);
+    // playersRef.orderByValue().on('value', showData, showError);
+
+    //limit startAt() endAt(i) equalTo(i) limitToFirst(i) limitToLast(i)
+    playersRef.orderByValue().limitToLast(2).on('value', showData, showError);
+
+
 
     function showData(items){
       // console.log(items.val())
+
+      var _ul = document.getElementsByTagName('ul')[0];
+      var _content = '';
+
+      items.forEach(function(child){
+        // orderby Child
+        // _content += "<li>" + child.val().name + " - " + child.val().no + "</li>";
+
+        //orderby Value
+        _content += "<li>" + child.key + " - " + child.val() + "</li>";
+      })
+
+      _ul.innerHTML = _content;
     }
 
     function userAdded(items){
