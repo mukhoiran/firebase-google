@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Firebase Upload</title>
+    <style media="screen">
+      body{
+        width: 80%;
+        margin: 20px auto;
+      }
+      .hidden{
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to Firebase Upload</h1>
+
+    <progress value="0" max="100" id="uploadProgress">0%</progress>
+    <input type="file" value="upload" id="uploadButton">
+    <hr>
+    <button type="button" id="downloadButton">Download</button>
+
+  </body>
+
+  <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyA128tacCTrHdf3uBxUJpQjEE9mIwvatKQ",
+      authDomain: "firstpro-2d6e9.firebaseapp.com",
+      databaseURL: "https://firstpro-2d6e9.firebaseio.com",
+      projectId: "firstpro-2d6e9",
+      storageBucket: "firstpro-2d6e9.appspot.com",
+      messagingSenderId: "557425118479"
+    };
+    firebase.initializeApp(config);
+    var storage = firebase.storage();
+
+    var progress = document.getElementById('uploadProgress')
+    var button = document.getElementById('uploadButton')
+    var downloadButton = document.getElementById('downloadButton')
+
+    // download
+    var imgRef = storage.ref('mukhoiran/Screenshot_2019-04-16_14-38-48.png')
+    downloadButton.addEventListener('click', function(){
+      imgRef.getDownloadURL().then(function(url){
+        console.log('download success')
+        console.log(url)
+      })
+    })
+
+    // upload
+    button.addEventListener('change', function(e){
+      // get file
+      var file = e.target.files[0];
+      var storageRef = storage.ref('mukhoiran/' + file.name)
+      var uploadTask = storageRef.put(file)
+
+      uploadTask.on('state_changed', loadUpload, errUpload, completeUpload)
+
+      function loadUpload(data){
+        var percent = (data.bytesTransferred/data.totalBytes) * 100
+        progress.value = percent
+      }
+
+      function errUpload(err){
+        console.log('error')
+        console.log(err)
+      }
+
+      function completeUpload(data){
+        console.log('success')
+        console.log(data)
+      }
+
+    })
+  </script>
+
+</html>
