@@ -8,4 +8,35 @@
     <h1>Welcome to Firebase</h1>
     <h3>Have fun with firebase</h3>
   </body>
+
+  <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyA128tacCTrHdf3uBxUJpQjEE9mIwvatKQ",
+      authDomain: "firstpro-2d6e9.firebaseapp.com",
+      databaseURL: "https://firstpro-2d6e9.firebaseio.com",
+      projectId: "firstpro-2d6e9",
+      storageBucket: "firstpro-2d6e9.appspot.com",
+      messagingSenderId: "557425118479"
+    };
+    firebase.initializeApp(config);
+
+    // reference database
+    var db = firebase.database();
+    var playersRef = db.ref('players');
+
+    // show data
+    playersRef.on('value', showData, showError);
+
+    function showData(items){
+      console.log(items.val())
+    }
+
+    function showError(items){
+      console.log(err)
+    }
+
+  </script>
+
 </html>
