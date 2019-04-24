@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Auth Firebase</title>
+    <style media="screen">
+      body{
+          width: 80%;
+          margin: 20px auto;
+      }
+      .hidden{
+          display:none;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>Welcome to Auth Firebase</h1>
+
+    <input type="email" name="email" id="email_text" value=""><br><br>
+    <input type="password" name="password" id="password_text" value=""><br><br>
+    <button id="signUp" type="button" name="button">Register</button>
+    <button id="login" type="button" name="button">Login</button>
+    <button id="logout" class="hidden" type="button" name="button">Logout</button>
+
+  </body>
+
+  <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyA128tacCTrHdf3uBxUJpQjEE9mIwvatKQ",
+      authDomain: "firstpro-2d6e9.firebaseapp.com",
+      databaseURL: "https://firstpro-2d6e9.firebaseio.com",
+      projectId: "firstpro-2d6e9",
+      storageBucket: "firstpro-2d6e9.appspot.com",
+      messagingSenderId: "557425118479"
+    };
+    firebase.initializeApp(config);
+
+    var auth = firebase.auth();
+
+    //prepare element
+    var email_text = document.getElementById('email_text');
+    var password_text = document.getElementById('password_text');
+    var login_btn = document.getElementById('login');
+    var signUp_btn = document.getElementById('signUp');
+    var logout_btn = document.getElementById('logout');
+
+    login_btn.addEventListener('click', handleLogin);
+    signUp_btn.addEventListener('click', handleSignup);
+    logout_btn.addEventListener('click', handleLogout);
+
+    function handleSignup() {
+      auth.createUserWithEmailAndPassword(email_text.value, password_text.value)
+          .then(function(data){
+            console.log("-- Registered --")
+            console.log(data)
+
+            // send verification email
+            auth.currentUser.sendEmailVerification().then(function(){
+              console.log('email sent')
+            }).catch(function(error){
+              console.log(error)
+            })
+            
+          })
+          .catch(function(err){
+            console.log(err)
+          })
+    }
+
+    function handleLogin() {
+      auth.signInWithEmailAndPassword(email_text.value, password_text.value)
+          .then(function(data){
+            console.log("-- Login --")
+            console.log(data)
+          })
+          .catch(function(err){
+            console.log(err)
+          })
+    }
+
+    function handleLogout() {
+      auth.signOut().then(function(){
+        console.log("-- Sign out --")
+      }).catch(function(err){
+        console.log(err)
+      })
+    }
+
+    auth.onAuthStateChanged(function(user){
+      if(user){
+        logout_btn.classList.remove('hidden')
+        signUp_btn.classList.add('hidden')
+        login_btn.classList.add('hidden')
+      }else{
+        console.log('user not yet login')
+        logout_btn.classList.add('hidden')
+        signUp_btn.classList.remove('hidden')
+        login_btn.classList.remove('hidden')
+      }
+    })
+
+  </script>
+</html>
