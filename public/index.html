@@ -29,8 +29,21 @@
     // show data
     playersRef.on('value', showData, showError);
 
+    // Notification
+    playersRef.on('child_added', userAdded);
+    playersRef.on('child_changed', userChanged);
+
     function showData(items){
+      // console.log(items.val())
+    }
+
+    function userAdded(items){
+      console.log("Congratulation! success add user")
       console.log(items.val())
+    }
+
+    function userChanged(items){
+      console.log("Congratulation! success changed user " + items.val().name)
     }
 
     function showError(items){
