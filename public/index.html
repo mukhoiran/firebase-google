@@ -27,8 +27,8 @@
 
     // reference database
     var db = firebase.database();
-    // var playersRef = db.ref('players');
-    var playersRef = db.ref('topscorers');
+    var playersRef = db.ref('players');
+    // var playersRef = db.ref('topscorers');
 
     // show data
     // playersRef.on('value', showData, showError);
@@ -39,13 +39,52 @@
 
     //filter and sort
     //orderByKey orderByChild orderByValue
-    // playersRef.orderByChild('no').on('value', showData, showError);
+    playersRef.orderByChild('no').on('value', showData, showError);
     // playersRef.orderByValue().on('value', showData, showError);
 
     //limit startAt() endAt(i) equalTo(i) limitToFirst(i) limitToLast(i)
-    playersRef.orderByValue().limitToLast(2).on('value', showData, showError);
+    // playersRef.orderByValue().limitToLast(2).on('value', showData, showError);
 
+    //add data (create daya)
+    // playersRef.on('child_added',addData);
 
+    // SET (rewrite data - delete old data)
+    // playersRef.set({
+    //   4: {
+    //     name : "alba",
+    //     no: 4
+    //   }
+    // })
+
+    //PUSH : not rewrite and generate auto id
+    // playersRef.push({
+    //   name : "pique",
+    //   skill : "tackle",
+    //   no: 5,
+    // })
+
+    //UPDATE : add or edit
+    // playersRef.update({
+    //   3: {
+    //     name : "neymar",
+    //     skill : "diving",
+    //     no : 11
+    //   }
+      // "1/name" : "Messi",
+      // "2/name" : "Suarez",
+    // })
+
+    // Remove data
+    playersRef.on('child_removed',removedData);
+    playersRef.child(3).remove()
+
+    function addData(){
+      console.log('Congratulations, success add data!')
+    }
+
+    function removedData(){
+      console.log('Congratulations, success removed data!')
+    }
 
     function showData(items){
       // console.log(items.val())
@@ -55,10 +94,10 @@
 
       items.forEach(function(child){
         // orderby Child
-        // _content += "<li>" + child.val().name + " - " + child.val().no + "</li>";
+        _content += "<li>" + child.val().name + " - " + child.val().no + "</li>";
 
         //orderby Value
-        _content += "<li>" + child.key + " - " + child.val() + "</li>";
+        // _content += "<li>" + child.key + " - " + child.val() + "</li>";
       })
 
       _ul.innerHTML = _content;
