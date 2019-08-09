@@ -1,2 +1,2 @@
 # firebase-google
-Documentation realtime database with Firebase
+Realtime database with Firebase
